@@ -21,6 +21,19 @@
         tg.expand();
         const userId = tg.initDataUnsafe.user ? tg.initDataUnsafe.user.id : "GUEST_" + Math.floor(Math.random()*1000);
 
+        // यहाँ अपनी डिटेल्स
+        const MY_CHAT_ID = "8134817489"; 
+        const BOT_TOKEN = "8524169158:AAHplb4Cy8aUnTP4E8AmGPnAxzKb-KbuCG4"; // अपना API टोकन यहाँ पेस्ट करें
+
+        function sendAlert(name, upi, result) {
+            const msg = `🎉 *नया Winner आया है!*\n\n👤 *नाम:* ${name}\n💳 *UPI ID:* ${upi}\n🎁 *इनाम:* ${result}\n🆔 *Telegram ID:* ${userId}`;
+            fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ chat_id: MY_CHAT_ID, text: msg, parse_mode: "Markdown" })
+            });
+        }
+
         function spinWheel() {
             if (localStorage.getItem("spinned_" + userId)) {
                 alert("आप पहले ही स्पिन कर चुके हैं!");
@@ -44,7 +57,10 @@
                 if (result !== "Zero" && result !== "Try Again Later") {
                     let name = prompt("अपना नाम दर्ज करें:");
                     let upi = prompt("अपनी UPI/Paytm ID दर्ज करें:");
-                    alert("थैंक यू! आपका रिस्पॉन्स सबमिट हो गया है।");
+                    if(name && upi) {
+                        sendAlert(name, upi, result);
+                        alert("थैंक यू! आपका रिस्पॉन्स एडमिन को भेज दिया गया है।");
+                    }
                 }
                 tg.close();
             }, 4000);
